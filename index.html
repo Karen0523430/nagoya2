@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名古屋・合掌村冬日之旅 8日行程</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Microsoft JhengHei', 'sans-serif'],
+                    },
+                    colors: {
+                        japan: {
+                            red: '#e60012',
+                            blue: '#1e3a8a',
+                            gold: '#d97706',
+                            snow: '#f8fafc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar for tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased selection:bg-rose-500 selection:text-white">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-200">
+                    <i class="fa-solid font-bold text-lg">❄️</i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">日本中部・合掌村冬日之旅</h1>
+                    <p class="text-xs text-slate-500">2026/01/23 (六) - 01/30 (六) 8日遊</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full sm:w-64">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="搜尋景點、美食、行程..." 
+                       class="w-full pl-9 pr-8 py-1.5 bg-slate-100 hover:bg-slate-200/70 focus:bg-white border border-transparent focus:border-sky-500 text-sm rounded-full transition duration-200 outline-none">
+                <button id="clearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Date / Day Navigation Tabs -->
+        <div class="max-w-4xl mx-auto px-2 overflow-x-auto no-scrollbar border-t border-slate-100 bg-slate-50/50">
+            <div class="flex space-x-1 py-2 min-w-max" id="dayTabs">
+                <!-- Tabs will be rendered here dynamically -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        
+        <!-- Quick Info Banner -->
+        <div id="dayHeader" class="bg-gradient-to-r from-sky-700 to-indigo-800 text-white rounded-2xl p-5 shadow-lg relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between">
+                <div>
+                    <span id="dayTag" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md mb-1.5">
+                        Day 1
+                    </span>
+                    <h2 id="dayTitle" class="text-2xl font-bold tracking-tight">1/23 (六) 出發與抵達</h2>
+                    <p id="daySubtitle" class="text-sky-100 text-sm mt-1 flex items-center gap-1.5">
+                        <i class="fa-regular fa-clock text-xs"></i> 今日重點：搭機赴日、登記入住飯店
+                    </p>
+                </div>
+                <div class="hidden sm:block text-right">
+                    <span class="text-3xl font-extrabold text-white/90" id="dayCountNum">01</span>
+                    <span class="text-xs text-sky-200 block uppercase tracking-wider">Jan 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results Count Notice (Hidden by default) -->
+        <div id="searchResultsNotice" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800 flex items-center justify-between">
+            <span><i class="fa-solid fa-filter text-amber-600 mr-2"></i>搜尋結果：共找到 <strong id="searchResultCount">0</strong> 筆資料</span>
+            <button id="resetSearchBtn" class="text-xs font-semibold text-amber-700 hover:underline">重置搜尋</button>
+        </div>
+
+        <!-- Timeline / Schedule Container -->
+        <div id="scheduleContainer" class="space-y-4">
+            <!-- Dynamic Schedule Cards will be injected here -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+        <p>日本中部・合掌村冬日自駕與自由行手冊</p>
+        <p class="mt-1 text-slate-400">點擊地圖按鈕可直接開啟 Google Maps 進行導航</p>
+    </footer>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        // Itinerary Dataset extracted from uploaded images
+        const itineraryData = [
+            {
+                date: "1/23",
+                dayOfWeek: "(六)",
+                title: "1/23 (六) 出發與抵達",
+                subtitle: "桃園 ➔ 名古屋中部國際機場 ➔ 機場住宿",
+                highlight: false,
+                items: [
+                    { time: "12:30", title: "出門", desc: "帶麵包 / 2大2小行李箱加浩肯背包；開車到大圓停車場，預計13:30坐上接駁車；桃園-大圓停車場：小樹點(信用卡)130點折抵免費停車一天", category: "transport" },
+                    { time: "14:00-15:00", title: "機場 Check in", desc: "桃園國際機場辦理登機手續", category: "transport" },
+                    { time: "17:15-20:50", title: "飛行：台灣 ➔ 名古屋", desc: "吃飛機餐", category: "transport" },
+                    { time: "20:30-21:00", title: "入境出關", desc: "準備前往住宿飯店", category: "transport" },
+                    { time: "12:20-13:10", title: "機場 ➔ 機場 INN", desc: "移動至東橫INN 1號店", category: "transport", maps: [{ name: "東橫INN 1號店", url: "https://maps.app.goo.gl/48HV18CzQnrez8cf6" }] },
+                    { time: "20:00-累了", title: "回飯店休息", desc: "機場有賣天空飯糰", category: "hotel", maps: [{ name: "天空飯糰 location", url: "https://maps.app.goo.gl/RePwYJWWXv8Ss5Q7" }] }
+                ]
+            },
+            {
+                date: "1/24",
+                dayOfWeek: "(日)",
+                title: "1/24 (日) 常滑漫遊 ➔ 飛驊高山",
+                subtitle: "✨ 合掌村點燈日（本日移動至高山）",
+                highlight: true,
+                items: [
+                    { time: "08:20", title: "退房", desc: "東橫INN 1號店（飯店有附早餐）", category: "hotel" },
+                    { time: "09:10", title: "從飯店出發", desc: "中部國際機場(TA24) → 常滑(TA22)，搭乘時間8分鐘", category: "transport" },
+                    { time: "09:30-09:45", title: "巨大招財貓", desc: "拍照打卡熱點", category: "spot", maps: [{ name: "巨大招財貓", url: "https://maps.app.goo.gl/aTvN5NLtmNgCePqV6" }] },
+                    { time: "09:30-11:00", title: "登窯廣場展示工房館", desc: "畫畫體驗：招き猫(右手)、招き猫(左手) 各￥2,200，預計停留1小時", category: "spot", maps: [{ name: "登窯廣場展示工房館", url: "https://maps.app.goo.gl/eRQh7AF1rMrx4Cq7" }] },
+                    { time: "11:00-11:15", title: "常滑陶瓷散步道", desc: "漫步陶瓷老街", category: "spot" },
+                    { time: "11:15-12:30", title: "午餐：Wabisuke 咖哩烏龍麵", desc: "預計停留1小時，推薦常滑牛乳", category: "food", maps: [
+                        { name: "Wabisuke", url: "https://maps.app.goo.gl/3FgV1utYN2uovc8h8" },
+                        { name: "常滑牛乳", url: "https://maps.app.goo.gl/9VmUEvZVjxhBK7oW8" }
+                    ] },
+                    { time: "13:00-14:00", title: "搭名鐵移動", desc: "常滑移動到名古屋站。名鐵：常滑(TA22) → 名古屋(NH36)，搭乘時間45分鐘，抓1小時", category: "transport" },
+                    { time: "14:30", title: "名古屋站出發前往高山", desc: "希望能搭上14:30的車，建議提早10分鐘到先排隊（車程預估3小時）", category: "transport" },
+                    { time: "17:20", title: "抵達高山站", desc: "預計17:20到，一下車就先去拿晚餐餐廳號碼牌", category: "transport" },
+                    { time: "晚餐首選", title: "晚餐：丸明 飛驊高山店 OR 味藏天國", desc: "順位1 丸明(建議早點去排隊號碼牌)；或 味藏天國(16:30開始，建議提早拿號碼牌)。預計約6點半-7點用餐", category: "food", maps: [
+                        { name: "丸明 飛驊高山店", url: "https://maps.app.goo.gl/GVPss6KwFSGrg3Ny6" },
+                        { name: "味藏天國 (網頁)", url: "https://plusweiplus.com/ajikura/" }
+                    ] },
+                    { time: "備註", title: "Family Store 超市", desc: "晚上 8點關門，可補充備品物資", category: "shopping", maps: [{ name: "Family Store", url: "https://maps.app.goo.gl/6Cce1QN6GKKDE8KA" }] },
+                    { time: "住宿", title: "入住 高山知豪酒店", desc: "高山站周邊住宿", category: "hotel", maps: [{ name: "高山知豪酒店", url: "https://maps.app.goo.gl/1K9ijk59uENVLpUN8" }] }
+                ]
+            },
+            {
+                date: "1/25",
+                dayOfWeek: "(一)",
+                title: "1/25 (一) 童話白川鄉合掌村 ➔ 高山老街",
+                subtitle: "夢幻雪景、合掌村巡禮、飛驊牛美食散策",
+                highlight: false,
+                items: [
+                    { time: "08:10", title: "出發搭巴士前往合掌村", desc: "前一晚買好早餐在車上吃；去程 08:10-09:00 / 回程 14:00-14:50", category: "transport" },
+                    { time: "09:00-11:00", title: "抵達合掌村 / 逛合掌村上半部", desc: "神田家，和田家，荻町城跡展望台，玩雪，以午餐為中間點分上下兩段", category: "spot", maps: [
+                        { name: "神田家", url: "https://maps.app.goo.gl/dhnrUHFBsAmwa8PL8" },
+                        { name: "和田家", url: "https://maps.app.goo.gl/CaBX44W2WJMPc3dZ8" },
+                        { name: "荻町城跡展望台", url: "https://maps.app.goo.gl/cqt1xvYi6ABqq8x7" }
+                    ] },
+                    { time: "11:00-12:30", title: "午餐：Keyaki (けやき)", desc: "合掌村內特色料理", category: "food", maps: [{ name: "Keyaki", url: "https://maps.app.goo.gl/fmXyv7hNKkp7LHCx6" }] },
+                    { time: "12:30-13:30", title: "逛合掌村下半部", desc: "忠兵衛、白川鄉三小屋（從午餐餐廳走過來約12分鐘）", category: "spot", maps: [
+                        { name: "忠兵衛", url: "https://maps.app.goo.gl/xxbH45h2ELwcKhHe7" },
+                        { name: "三小屋", url: "https://maps.app.goo.gl/PrKqN5uTbijp4t4aA" }
+                    ] },
+                    { time: "13:00-13:30", title: "下午茶：落人咖啡館 / 布丁之家", desc: "古屋咖啡館 落人 (喝熱紅豆湯) / 白川鄉布丁之家", category: "food" },
+                    { time: "14:00-14:50", title: "搭乘回程巴士 ➔ 抵達高山站", desc: "13:50 準備搭車", category: "transport" },
+                    { time: "15:00-18:00", title: "高山老街 & 高山昭和館", desc: "高山車站和高山老街逛逛，可參觀高山昭和館。老街美食攻略：六拾番烤肉串、Andersen可頌、Noix De Coco布丁、岩卜屋棉花糖壽喜燒、飛驊特牛壽司、橋本煎餅堂、飛驊牛肉包、高山布丁亭、大屋醬油買赤味噌、飛驊中華拉麵", category: "spot", maps: [
+                        { name: "高山老街主要街道", url: "https://maps.app.goo.gl/HsHgY1Jp3fz1r7VeA" },
+                        { name: "高山昭和館", url: "https://maps.app.goo.gl/jKT65P5LsFMuyVsW9" },
+                        { name: "六拾番 烤肉串", url: "https://maps.app.goo.gl/xYHiUPCkBce2Dq5z9" },
+                        { name: "Andersen 可頌", url: "https://maps.app.goo.gl/cp3xB7KCvZYGfed58" },
+                        { name: "Noix De Coco 布丁", url: "https://maps.app.goo.gl/9h9u5QffJzT8JphM8" },
+                        { name: "岩卜屋 棉花糖壽喜燒", url: "https://maps.app.goo.gl/QhJT8q85J6Ku7yYV8" },
+                        { name: "飛驊特牛 壽司專賣店", url: "https://maps.app.goo.gl/VcyMLmDUYXxKSUGD8" },
+                        { name: "橋本煎餅堂", url: "https://maps.app.goo.gl/esz2SsgkqLbmv1A7" },
+                        { name: "Hida Gyuman (牛肉包)", url: "https://maps.app.goo.gl/Q6jxNJVA3ZhNnt847" },
+                        { name: "高山布丁亭", url: "https://maps.app.goo.gl/eAkTaLHif3sNNs1m6" },
+                        { name: "大屋釀造醬油", url: "https://maps.app.goo.gl/HctGRnwe5XdQcow76" },
+                        { name: "飛驊中華拉麵專賣店", url: "https://maps.app.goo.gl/uMF7LJwNMpqs7XcS9" }
+                    ] },
+                    { time: "19:00", title: "Family Store 超市", desc: "買些點心備品，晚上8點關門", category: "shopping", maps: [{ name: "Family Store Satoh", url: "https://maps.app.goo.gl/W5YfHtjPusjQ8H2m7" }] },
+                    { time: "20:00", title: "回飯店休息", desc: "住：高山知豪酒店", category: "hotel" }
+                ]
+            },
+            {
+                date: "1/26",
+                dayOfWeek: "(二)",
+                title: "1/26 (二) 高山宮川朝市 ➔ 名古屋榮商圈",
+                subtitle: "朝市巡禮、大須商店街美食暴走",
+                highlight: false,
+                items: [
+                    { time: "08:00", title: "退房", desc: "準備行李辦理退房", category: "hotel" },
+                    { time: "08:00-09:45", title: "宮川朝市（吃早餐）", desc: "從鍛冶橋開始逛，9:50準備搭車", category: "spot" },
+                    { time: "10:00-12:45", title: "搭乘濃飛巴士 ➔ 名古屋", desc: "搭乘濃飛巴士前往名古屋站", category: "transport" },
+                    { time: "13:00", title: "預計抵達名古屋站", desc: "享用簡單午餐", category: "food" },
+                    { time: "14:00", title: "Check in 飯店", desc: "入住名古屋榮弗爾札飯店，帶浩肯背包出門", category: "hotel", maps: [{ name: "名古屋榮弗爾札飯店", url: "https://maps.app.goo.gl/wQPxLCVBfumSggB8b" }] },
+                    { time: "15:00", title: "前往大須商店街", desc: "走路去大須觀音約13分鐘", category: "spot", maps: [{ name: "大須觀音/商店街", url: "https://maps.app.goo.gl/DoN11z1QN3XuWQkZ8" }] },
+                    { time: "15:00-18:00", title: "大須商店街 邊逛邊吃", desc: "美食品嚮導：弁才天水果大福、築地銀章魚燒、Ye Ryang Sen Cheng (生煎包)、ジョンノ屋台村 (起司熱狗)、EN SHI DA JI PAI (大雞排) 可路過", category: "food", maps: [
+                        { name: "大須商店街", url: "https://maps.app.goo.gl/irMb1C1X7v1Z9Fk47" },
+                        { name: "弁才天 大福", url: "https://maps.app.goo.gl/F6fHK8ixDd1hrSfA9" },
+                        { name: "築地銀章魚", url: "https://maps.app.goo.gl/LSpU7RANX7y6nSG99" },
+                        { name: "生煎包 (Ye Ryang)", url: "https://maps.app.goo.gl/1pYRTq6fSNS3Vi6y7" },
+                        { name: "起司熱狗", url: "https://maps.app.goo.gl/mdXJ8iYGHaKahu936" },
+                        { name: "EN SHI DA 大雞排", url: "https://maps.app.goo.gl/u4oPj7pSuFBiFLXU6" }
+                    ] },
+                    { time: "18:00", title: "晚餐：味噌鍋燒烏龍麵", desc: "順便購買隔天早餐", category: "food", maps: [{ name: "味噌鍋燒烏龍麵", url: "https://maps.app.goo.gl/XaijmaDp8avmLy48A" }] },
+                    { time: "19:00", title: "Amica Osu 批發超市", desc: "晚上8點關門，可採買補貨", category: "shopping", maps: [{ name: "Amica Osu", url: "https://maps.app.goo.gl/qzadCkrop8DZCy3k7" }] },
+                    { time: "20:00", title: "回飯店休息", desc: "住：名古屋榮弗爾札飯店。地下鐵矢場町站走5號或6號出口，步行只需約5分鐘", category: "hotel", maps: [{ name: "飯店位置", url: "https://maps.app.goo.gl/re1B2d5EfnaPbrZ18" }] }
+                ]
+            },
+            {
+                date: "1/27",
+                dayOfWeek: "(三)",
+                title: "1/27 (三) 名古屋樂高樂園一日遊",
+                subtitle: "樂高主題樂園、唐吉訶德採購、矢場味噌豬排",
+                highlight: false,
+                items: [
+                    { time: "08:00", title: "起床享用早餐", desc: "前一晚買好早餐，在房間舒適吃完", category: "food" },
+                    { time: "09:00", title: "出門前往樂園", desc: "準備搭乘地鐵", category: "transport" },
+                    { time: "09:00-10:00", title: "搭地鐵移動（約50分鐘）", desc: "1. 飯店步行至『榮站』搭乘東山線(往高畑方向)約5分鐘至『名古屋站』下車。<br>2. 轉乘青波線往『金城ふ頭』方向，坐到終點站『金城埠頭站』下車", category: "transport" },
+                    { time: "10:00-17:00", title: "日本樂高樂園 LEGOLAND", desc: "營業時間10:00-18:00。建議採『順時針』玩，先從海盜區會濕身的那區開始！午餐在園區內享用", category: "spot" },
+                    { time: "17:00", title: "離開樂高樂園", desc: "搭車返回市區", category: "transport" },
+                    { time: "晚餐 & 購物", title: "晚餐：味噌豬排 矢場 ＆ 榮商圈逛街", desc: "吃知名矢場味噌豬排，逛唐吉訶德榮三丁目店及 Amica Osu 批發超市(8點關)", category: "food", maps: [
+                        { name: "矢場味噌豬排", url: "https://maps.app.goo.gl/nTVeQmaDcWxoEPRR9" },
+                        { name: "唐吉訶德 榮三丁目店", url: "https://maps.app.goo.gl/VFC2SgQf8mgkSuAY6" }
+                    ] },
+                    { time: "晚上", title: "回飯店休息", desc: "住：名古屋榮弗爾札飯店", category: "hotel", maps: [{ name: "名古屋榮弗爾札飯店", url: "https://maps.app.goo.gl/re1B2d5EfnaPbrZ18" }] }
+                ]
+            },
+            {
+                date: "1/28",
+                dayOfWeek: "(四)",
+                title: "1/28 (四) 名古屋市區大採購 ➔ 鰻魚飯三吃",
+                subtitle: "寶可夢中心、服飾品牌大採購、手羽先名店",
+                highlight: false,
+                items: [
+                    { time: "09:00", title: "出門吃早餐", desc: "帶浩肯背包出門，品嚐著名的『炸蝦三明治』", category: "food", maps: [{ name: "炸蝦三明治", url: "https://maps.app.goo.gl/LtVhsBJDpBRihyhH7" }] },
+                    { time: "10:00-11:30", title: "逛街採購：GU / Uniqlo / 大創", desc: "營業時間皆為 10:00-20:00", category: "shopping", maps: [
+                        { name: "大創 DAISO", url: "https://maps.app.goo.gl/mjq5r6GRdbzTJ2D68" },
+                        { name: "GU", url: "https://maps.app.goo.gl/Bbjs6ExgMjr1iAw7A" },
+                        { name: "Uniqlo", url: "https://maps.app.goo.gl/9ZkjFrmVa1M8SVW9" }
+                    ] },
+                    { time: "11:30-12:30", title: "寶可夢中心 名古屋店", desc: "Pokemon Center，營業時間 10:00-20:00", category: "shopping", maps: [{ name: "寶可夢中心 名古屋", url: "https://maps.app.goo.gl/ttR3mDc7mP1JX92V8" }] },
+                    { time: "12:30", title: "午餐：鰻櫃 花岡 (鰻魚飯三吃)", desc: "預計 12:30 享用名物鰻魚飯", category: "food", maps: [{ name: "鰻櫃 花岡", url: "https://maps.app.goo.gl/zXSrFBXRd4afnStR7" }] },
+                    { time: "13:00-13:30", title: "茅乃舍 松坂屋名古屋店", desc: "購買優質高湯包、高湯醬油", category: "shopping", maps: [{ name: "茅乃舍", url: "https://maps.app.goo.gl/voJ5yCDFtM6WUzzj7" }] },
+                    { time: "13:30-", title: "PARCO 名古屋 西館", desc: "買 HOKA 運動鞋及潮牌服飾", category: "shopping", maps: [{ name: "PARCO 名古屋", url: "https://maps.app.goo.gl/S3Z7OxGXqPDp1dHu6" }] },
+                    { time: "18:00", title: "Alpen NAGOYA", desc: "大型戶外運動用品旗艦店 (營業至21:00)", category: "shopping", maps: [{ name: "Alpen NAGOYA", url: "https://maps.app.goo.gl/gQNZpTcYmmK6MCfJ9" }] },
+                    { time: "19:00", title: "Amica Osu 批發超市", desc: "把握 8 點關門前最後補貨", category: "shopping", maps: [{ name: "Amica Osu", url: "https://maps.app.goo.gl/NCzeNFDJEapHp6iw6" }] },
+                    { time: "晚餐", title: "晚餐：世界的山將 (Sekai no Yamachan)", desc: "必吃招牌夢幻手羽先(炸雞翅) 榮店", category: "food", maps: [{ name: "世界的山將 榮店", url: "https://maps.app.goo.gl/aoC5PD6x1XfdTCdZ7" }] },
+                    { time: "回飯店", title: "回飯店休息", desc: "住：名古屋榮弗爾札飯店", category: "hotel", maps: [{ name: "名古屋榮弗爾札飯店", url: "https://maps.app.goo.gl/re1B2d5EfnaPbrZ18" }] }
+                ]
+            },
+            {
+                date: "1/29",
+                dayOfWeek: "(五)",
+                title: "1/29 (五) 科學館極寒體驗 ➔ 機場前夜",
+                subtitle: "名古屋市科學館、BicCamera電器大採購",
+                highlight: false,
+                items: [
+                    { time: "09:00", title: "退房出門", desc: "整理行李辦理退房手續", category: "hotel" },
+                    { time: "09:00-10:00", title: "早餐：Okage庵 榮廣小路店", desc: "客美多(Komeda)旗下日式甘味處早餐", category: "food" },
+                    { time: "10:00-15:00", title: "名古屋市科學館", desc: "預計停留5小時！買完票先直接到五樓抽取『極寒Lab』整理券", category: "spot", maps: [{ name: "名古屋市科學館", url: "https://maps.app.goo.gl/TmgVaLg2PQn5C6W48" }] },
+                    { time: "15:00-16:30", title: "BicCamera 電器買物", desc: "採買日本最新熱門家電", category: "shopping", maps: [{ name: "BicCamera", url: "https://maps.app.goo.gl/gtFyZaFzWEG9867s6" }] },
+                    { time: "傍晚", title: "吃午晚餐", desc: "品嚐市區特色美食", category: "food" },
+                    { time: "17:00", title: "回飯店拿行李 ➔ 往機場移動", desc: "返回名古屋榮弗爾札飯店拿寄放的行李，搭車前往機場（車程抓1小時）", category: "transport", maps: [{ name: "飯店取行李", url: "https://maps.app.goo.gl/re1B2d5EfnaPbrZ18" }] },
+                    { time: "晚上", title: "入住機場飯店", desc: "入住 東橫INN 1號店（便於隔日搭機）", category: "hotel", maps: [{ name: "東橫INN 1號店", url: "https://maps.app.goo.gl/48HV18CzQnrez8cf6" }] }
+                ]
+            },
+            {
+                date: "1/30",
+                dayOfWeek: "(六)",
+                title: "1/30 (六) 滿載而歸 ➔ 飛回台灣",
+                subtitle: "名古屋中部國際機場 ➔ 桃園國際機場",
+                highlight: false,
+                items: [
+                    { time: "07:00", title: "退房", desc: "飯店有附早餐，吃飽後退房", category: "hotel" },
+                    { time: "07:30", title: "機場 Check in", desc: "辦理登機手續與行李託運", category: "transport" },
+                    { time: "09:50-12:15", title: "飛行返台 (JP 09:50 ➔ TW 12:15)", desc: "中華航空航班，吃飛機餐，順利抵達桃園機場", category: "transport" }
+                ]
+            }
+        ];
+
+        // State Management
+        let currentDayIndex = 0;
+        let searchQuery = "";
+
+        // DOM Elements
+        const dayTabsContainer = document.getElementById('dayTabs');
+        const scheduleContainer = document.getElementById('scheduleContainer');
+        const dayTag = document.getElementById('dayTag');
+        const dayTitle = document.getElementById('dayTitle');
+        const daySubtitle = document.getElementById('daySubtitle');
+        const dayCountNum = document.getElementById('dayCountNum');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const searchResultsNotice = document.getElementById('searchResultsNotice');
+        const searchResultCount = document.getElementById('searchResultCount');
+        const resetSearchBtn = document.getElementById('resetSearchBtn');
+
+        // Helper to get category icons & styles
+        function getCategoryStyle(category) {
+            switch(category) {
+                case 'food':
+                    return { icon: 'fa-utensils', bg: 'bg-amber-100', text: 'text-amber-700', label: '美食' };
+                case 'spot':
+                    return { icon: 'fa-camera-retro', bg: 'bg-emerald-100', text: 'text-emerald-700', label: '景點' };
+                case 'shopping':
+                    return { icon: 'fa-bag-shopping', bg: 'bg-purple-100', text: 'text-purple-700', label: '購物' };
+                case 'hotel':
+                    return { icon: 'fa-bed', bg: 'bg-rose-100', text: 'text-rose-700', label: '住宿' };
+                case 'transport':
+                default:
+                    return { icon: 'fa-bus', bg: 'bg-sky-100', text: 'text-sky-700', label: '交通/流程' };
+            }
+        }
+
+        // Render Day Tabs
+        function renderTabs() {
+            dayTabsContainer.innerHTML = itineraryData.map((day, idx) => {
+                const isActive = (idx === currentDayIndex && !searchQuery);
+                return `
+                    <button onclick="switchDay(${idx})" 
+                            class="px-3.5 py-1.5 rounded-full text-xs font-medium transition duration-200 flex items-center gap-1.5 ${
+                                isActive 
+                                    ? 'bg-sky-600 text-white shadow-md shadow-sky-200 font-semibold' 
+                                    : 'bg-white text-slate-600 hover:bg-slate-200/60 border border-slate-200'
+                            }">
+                        <span>${day.date} ${day.dayOfWeek}</span>
+                        ${day.highlight ? '<span class="w-2 h-2 rounded-full bg-amber-400"></span>' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Render Header Banner for Selected Day
+        function renderHeader() {
+            const day = itineraryData[currentDayIndex];
+            dayTag.innerText = `Day ${currentDayIndex + 1}`;
+            dayTitle.innerText = day.title;
+            daySubtitle.innerHTML = `<i class="fa-regular fa-clock text-xs"></i> ${day.subtitle}`;
+            dayCountNum.innerText = (currentDayIndex + 1).toString().padStart(2, '0');
+        }
+
+        // Render Schedule Items
+        function renderSchedule() {
+            scheduleContainer.innerHTML = '';
+
+            let itemsToDisplay = [];
+
+            if (searchQuery) {
+                // Global Search mode
+                searchResultsNotice.classList.remove('hidden');
+                itineraryData.forEach((day, dIdx) => {
+                    day.items.forEach(item => {
+                        const matchTitle = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+                        const matchDesc = item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                        const matchTime = item.time.toLowerCase().includes(searchQuery.toLowerCase());
+                        if (matchTitle || matchDesc || matchTime) {
+                            itemsToDisplay.push({ ...item, dayDate: day.date, dayTitle: day.title, dayIdx: dIdx });
+                        }
+                    });
+                });
+                searchResultCount.innerText = itemsToDisplay.length;
+            } else {
+                // Day mode
+                searchResultsNotice.classList.add('hidden');
+                itemsToDisplay = itineraryData[currentDayIndex].items;
+            }
+
+            if (itemsToDisplay.length === 0) {
+                scheduleContainer.innerHTML = `
+                    <div class="text-center py-12 bg-white rounded-2xl border border-slate-200 p-6">
+                        <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 mb-3"></i>
+                        <p class="text-slate-600 font-medium">找不到與「${searchQuery}」相關的行程</p>
+                        <p class="text-xs text-slate-400 mt-1">請嘗試搜尋關鍵字如：合掌村、拉麵、名古屋、壽司</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsToDisplay.forEach((item, index) => {
+                const style = getCategoryStyle(item.category);
+                
+                // Map links HTML
+                let mapsHtml = '';
+                if (item.maps && item.maps.length > 0) {
+                    mapsHtml = `
+                        <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap gap-2">
+                            ${item.maps.map(m => `
+                                <a href="${m.url}" target="_blank" rel="noopener noreferrer" 
+                                   class="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200/80 rounded-lg text-xs font-medium transition duration-150">
+                                    <i class="fa-solid fa-location-dot text-rose-500"></i>
+                                    <span>${m.name}</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-sky-400 ml-0.5"></i>
+                                </a>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                // Date badge for search results mode
+                let searchDayBadge = '';
+                if (searchQuery) {
+                    searchDayBadge = `<span class="mb-1 inline-block text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">${item.dayDate} - ${item.dayTitle}</span>`;
+                }
+
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 relative overflow-hidden">
+                        ${searchDayBadge}
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 font-mono tracking-tight">
+                                    ${item.time}
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium ${style.bg} ${style.text}">
+                                    <i class="fa-solid ${style.icon} text-[10px]"></i>
+                                    ${style.label}
+                                </span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-base font-bold text-slate-800 mt-2.5 flex items-center gap-2">
+                            ${item.title}
+                        </h3>
+
+                        ${item.desc ? `<p class="text-sm text-slate-600 mt-1.5 leading-relaxed">${item.desc}</p>` : ''}
+
+                        ${mapsHtml}
+                    </div>
+                `;
+
+                scheduleContainer.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // Switch Day Handler
+        function switchDay(index) {
+            currentDayIndex = index;
+            searchQuery = "";
+            searchInput.value = "";
+            clearSearchBtn.classList.add('hidden');
+            renderTabs();
+            renderHeader();
+            renderSchedule();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Search Input Handlers
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            if (searchQuery) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderTabs();
+            renderSchedule();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = "";
+            searchQuery = "";
+            clearSearchBtn.classList.add('hidden');
+            renderTabs();
+            renderSchedule();
+        });
+
+        resetSearchBtn.addEventListener('click', () => {
+            searchInput.value = "";
+            searchQuery = "";
+            clearSearchBtn.classList.add('hidden');
+            renderTabs();
+            renderSchedule();
+        });
+
+        // Initialize App
+        function init() {
+            renderTabs();
+            renderHeader();
+            renderSchedule();
+        }
+
+        init();
+    </script>
+</body>
+</html>
